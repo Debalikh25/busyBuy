@@ -15,9 +15,10 @@ const Login = () => {
         e.preventDefault()
         try {
             await signInWithEmailAndPassword(auth, data.email, data.password)
+            console.log('Sign In Successfull !!')
         }
         catch (error) {
-            console.log('Some error occured while login !')
+            console.log('Some error occured while login !' , error)
         }
 
     }
