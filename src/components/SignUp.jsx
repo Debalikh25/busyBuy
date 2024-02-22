@@ -20,7 +20,7 @@ const SignUp = () => {
              console.log('User Signed Up Successfully')
          }
          catch(error){
-            console.log('Error Signing Up User' , error)
+            console.log(error.message)
          }
     }
 
