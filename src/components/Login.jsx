@@ -11,6 +11,8 @@ const Login = () => {
 
     const auth = getAuth();
 
+
+
     const login = async (e) => {
         e.preventDefault()
         try {
@@ -18,7 +20,7 @@ const Login = () => {
             console.log('Sign In Successfull !!')
         }
         catch (error) {
-            console.log('Some error occured while login !' , error)
+            console.log('Some error occured while login !', error)
         }
 
     }
