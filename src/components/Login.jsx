@@ -1,7 +1,7 @@
-import { useState  } from "react"
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import {ToastContainer , toast} from "react-toastify"
+import { successMessage, failureMessage, ToastContainer } from "./toastAlert";
 import PacmanLoader from "react-spinners/PacmanLoader";
 const Login = () => {
 
@@ -11,11 +11,7 @@ const Login = () => {
         password: ""
     })
 
-    const override = {
-        display: "block",
-        margin: "0 auto",
-        borderColor: "red",
-      };
+
 
     const navigate = useNavigate();
 
@@ -23,40 +19,55 @@ const Login = () => {
 
     const auth = getAuth();  
 
+
+
     const login = async (e) => {
         e.preventDefault()
         try {
             setLoading(true)
-            await signInWithEmailAndPassword(auth, data.email, data.password)
-             toast('Login Success' , {
-                position : "top-right",
-                autoClose : 5000,
-                theme :"light",
-                transition : "bounce" 
-             })
-            setTimeout(()=>{
+            const loginUser = await signInWithEmailAndPassword(auth, data.email, data.password)
+            localStorage.setItem("user", loginUser.user)
+            setLoading(false)
+
+            successMessage("Login Success !!")
+
+            setTimeout(() => {
                 navigate("/")
-            } , 5000)
+            }, 5000)
         }
         catch (error) {
-            toast('Wrong Credentials' , {
-                position : "top-right",
-                autoClose : 5000
-             })
-            setLoading(false)
+          failureMessage("Wrong Credentials")
+            setLoading(true)
         }
-}
+    }
 
     return (
 
-        <>
-            <form onSubmit={(e) => login(e)}>
+        <div className="container">
 
-                <input type="email" name="email" onChange={(e) => setData({ ...data, email: e.target.value })} placeholder="Enter Email" required />
+            <ToastContainer />
 
-                <input type="password" name="password" onChange={(e) => setData({ ...data, password: e.target.value })} placeholder="Enter Password" required />
+            
 
-                <input type="submit" value="Login" />
+            <form className="form" onSubmit={(e) => login(e)}>
+            <h3 className="mb-3">Login</h3>
+                <div className="form-group">
+
+                    <input type="email" name="email" className="form-control" onChange={(e) => setData({ ...data, email: e.target.value })} placeholder="Enter Email" required />
+
+                </div>
+
+                <div className="form-group">
+
+                    <input type="password" name="password" className="form-control" onChange={(e) => setData({ ...data, password: e.target.value })} placeholder="Enter Password" required />
+
+                </div>
+
+                <input type="submit" className="btn btn-success" value="Login" />
+
+
+
+
 
             </form>
 
@@ -68,21 +79,28 @@ const Login = () => {
                 data-testid="loader"
             />
 
-            <ToastContainer 
-                  position="top-right"
-                  autoClose={5000}
-                  hideProgressBar={false}
-                  newestOnTop={false}
-                  closeOnClick
-                  rtl={false}
-                  pauseOnFocusLoss
-                  draggable
-                  pauseOnHover
-                  theme="light"
-                  transition="bounce"  />
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+                transition="bounce" />
 
 
-        </>
+
+        </div>
+
+
+
+
+
+
 
     )
 
