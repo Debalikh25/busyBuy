@@ -1,8 +1,9 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
 import { useNavigate } from "react-router-dom"
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { authContext } from "../authContext";
 import { successMessage, failureMessage, ToastContainer } from "./toastAlert";
-import PacmanLoader from "react-spinners/PacmanLoader";
+import Spinner from "./Spinner";
 const Login = () => {
 
 
@@ -11,13 +12,14 @@ const Login = () => {
         password: ""
     })
 
+    const { loggedIn, setLoggedIn } = useContext(authContext)
 
 
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState(false)
 
-    const auth = getAuth();  
+    const auth = getAuth();
 
 
 
@@ -30,14 +32,14 @@ const Login = () => {
             setLoading(false)
 
             successMessage("Login Success !!")
-
+            setLoggedIn(true)
             setTimeout(() => {
-                navigate("/")
+                navigate("/home")
             }, 5000)
         }
         catch (error) {
-          failureMessage("Wrong Credentials")
-            setLoading(true)
+            failureMessage("Wrong Credentials")
+            setLoading(false)
         }
     }
 
@@ -47,10 +49,10 @@ const Login = () => {
 
             <ToastContainer />
 
-            
+
 
             <form className="form" onSubmit={(e) => login(e)}>
-            <h3 className="mb-3">Login</h3>
+                <h3 className="mb-3">Login</h3>
                 <div className="form-group">
 
                     <input type="email" name="email" className="form-control" onChange={(e) => setData({ ...data, email: e.target.value })} placeholder="Enter Email" required />
@@ -71,20 +73,14 @@ const Login = () => {
 
             </form>
 
-            <PacmanLoader
-                color="red"
-                loading={loading}
-                size={70}
-                aria-label="Loading Spinner"
-                data-testid="loader"
-            />
+            <Spinner loader={loading}/>
 
             <ToastContainer
                 position="top-right"
                 autoClose={5000}
                 hideProgressBar={false}
                 newestOnTop={false}
-                closeOnClick
+                closeOnClick={true}
                 rtl={false}
                 pauseOnFocusLoss
                 draggable

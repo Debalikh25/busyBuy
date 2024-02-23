@@ -32,15 +32,17 @@ function App() {
           },
 
           {
-            path : "home" , element : <Home />
+            path : "/home" , element : <Home /> , children : [
+              {
+                path : "cart" , element : <Cart />
+              },
+    
+              {
+                path : "orders" , element : <Orders />
+              }
+            ]
           },
-          {
-            path : "cart" , element : <Cart />
-          },
-
-          {
-            path : "orders" , element : <Orders />
-          }
+         
         ]
       },
 
