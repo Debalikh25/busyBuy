@@ -1,8 +1,7 @@
 import { useState } from "react"
-
-import { getAuth, createUserWithEmailAndPassword,
-    signInWithEmailAndPassword } from 'firebase/auth';
-
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { useNavigate } from "react-router-dom";
+import { successMessage, failureMessage, ToastContainer } from "./toastAlert";
 const SignUp = () => {
 
 
@@ -10,30 +9,51 @@ const SignUp = () => {
         email: "",
         password: ""
     })
- 
-      const auth = getAuth();
+
+    const auth = getAuth();
+    const navigate = useNavigate();
 
     const register = async (e) => {
         e.preventDefault()
-         try{
-             await createUserWithEmailAndPassword(auth , data.email , data.password)
-             console.log('User Signed Up Successfully')
-         }
-         catch(error){
-            console.log('Error Signing Up User' , error)
-         }
+        try {
+            await createUserWithEmailAndPassword(auth, data.email, data.password)
+            successMessage("Registration Successful !")
+            setTimeout(() => {
+                navigate("/login")
+            }, 3000)
+        }
+        catch (error) {
+            failureMessage(`Something went wrong: ${error.message}`)
+        }
     }
 
     return (
-        <form onSubmit={(e) => register(e)}>
 
-            <input type="email" name="email" onChange={(e) => setData({ ...data, email: e.target.value })} placeholder="Enter Email" required />
+        <div className="container">
+            <ToastContainer />
 
-            <input type="password" name="password" onChange={(e) => setData({ ...data, password: e.target.value })} placeholder="Enter Password" required />
 
-            <input type="submit" value="Sign Up" />
+            <form className="form" onSubmit={(e) => register(e)}>
+                <h3 className="mb-3" >Register</h3>
+                <div className="form-group">
+                    <input type="email" name="email" className="form-control" onChange={(e) => setData({ ...data, email: e.target.value })} placeholder="Enter Email" required />
+                </div>
 
-        </form>
+                <div className="form-group">
+                    <input type="password" name="password" className="form-control" onChange={(e) => setData({ ...data, password: e.target.value })} placeholder="Enter Password" required />
+                </div>
+
+
+
+
+
+                <input type="submit" className="btn btn-primary" value="Sign Up" />
+
+            </form>
+
+        </div>
+
+
     )
 
 }
