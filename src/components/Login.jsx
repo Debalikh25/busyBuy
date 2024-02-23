@@ -21,7 +21,7 @@ const Login = () => {
 
     const [loading, setLoading] = useState(false)
 
-    const auth = getAuth();
+    const auth = getAuth();  
 
     const login = async (e) => {
         e.preventDefault()
